@@ -6,6 +6,7 @@ int sqsum(int k);
 int main()
 {
     int i,j,k,l;
+    cout<<"enter a number"<<endl;
     cin>>k;
     j=somth(k);
     i=fac(k);

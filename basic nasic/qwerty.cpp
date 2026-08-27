@@ -3,7 +3,7 @@ using namespace std;
 int gugi(int r);
 int main()
 {
-    cout<<"hello nih"<<endl;
+    cout<<"hello nih"<<endl<<"enter the number you want to sqaure :5";
     ;
     int x;
     cin>>x;
