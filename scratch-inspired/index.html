@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#4d97ff">
+  <title>Sprout — Make, play, share</title>
+  <style>
+    :root {
+      --blue: #4d97ff;
+      --blue-deep: #3373cc;
+      --purple: #7c4dff;
+      --ink: #24324a;
+      --orange: #ffab19;
+      --coral: #ff6680;
+      --green: #65c466;
+      --page: #f7f9fc;
+      --line: #e1e8f3;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--page); font-family: "Avenir Next", "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    button, input { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    .topbar { min-height: 64px; background: var(--blue); color: #fff; display: flex; align-items: center; padding: 0 max(24px, calc((100vw - 1220px) / 2)); gap: 27px; position: relative; z-index: 5; }
+    .brand { display: inline-flex; align-items: center; font-size: 25px; font-weight: 900; letter-spacing: -.8px; white-space: nowrap; }
+    .brand-mark { width: 29px; height: 29px; background: #fff; border-radius: 50% 48% 52% 44%; margin-right: 7px; position: relative; transform: rotate(-13deg); }
+    .brand-mark:before, .brand-mark:after { content: ""; position: absolute; background: var(--orange); border-radius: 50%; }
+    .brand-mark:before { width: 6px; height: 6px; left: 8px; top: 7px; box-shadow: 9px 2px 0 var(--orange); }
+    .brand-mark:after { width: 12px; height: 5px; left: 9px; top: 17px; }
+    nav { display: flex; gap: 22px; align-items: center; font-size: 15px; font-weight: 700; flex: 1; }
+    nav a { opacity: .98; }
+    nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
+    .search { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.45); border-radius: 22px; height: 34px; width: 166px; color: white; outline: none; padding: 0 13px; }
+    .search::placeholder { color: rgba(255,255,255,.85); }
+    .join { background: #fff; color: var(--blue-deep); border: none; border-radius: 18px; font-weight: 900; padding: 8px 16px; cursor: pointer; }
+    .menu-button { display:none; margin-left:auto; background:transparent; border:0; color:#fff; font-size:26px; cursor:pointer; }
+    .hero { background: linear-gradient(115deg, #8257e8 0%, #6d5ee9 42%, #4d97ff 100%); overflow: hidden; position: relative; min-height: 442px; }
+    .hero:before, .hero:after { content:""; position:absolute; border: 2px solid rgba(255,255,255,.18); border-radius:50%; }
+    .hero:before { width: 310px; height: 310px; top:-155px; left:-78px; }
+    .hero:after { width: 420px; height: 420px; right:-183px; bottom:-265px; }
+    .hero-inner { max-width: 1170px; min-height: 442px; margin: auto; padding: 63px 28px 45px; display: grid; grid-template-columns: 1.08fr .92fr; gap: 48px; align-items: center; position: relative; }
+    .hero-copy { color:#fff; z-index:1; }
+    .hero-kicker { display:inline-block; color:rgba(255,255,255,.92); font-size:15px; font-weight:800; letter-spacing:.5px; margin-bottom:11px; }
+    h1 { margin: 0 0 14px; max-width: 600px; font-size: clamp(42px, 5vw, 65px); line-height: .98; letter-spacing:-2.7px; }
+    .hero-copy p { max-width: 485px; font-size: 18px; line-height: 1.5; margin: 0 0 25px; color: rgba(255,255,255,.94); }
+    .cta { border: none; border-radius: 24px; padding: 12px 25px; background: var(--orange); color: #5c3b02; box-shadow: 0 4px 0 rgba(91,58,2,.28); font-size: 17px; font-weight: 900; cursor:pointer; transition: transform .16s, box-shadow .16s; }
+    .cta:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(91,58,2,.23); }
+    .editor { background: white; border-radius: 14px; height: 292px; padding: 0; box-shadow: 0 18px 40px rgba(36,27,117,.27); overflow:hidden; transform: rotate(1.5deg); position:relative; }
+    .editor-top { height:38px; background:#f3f5f8; display:flex; align-items:center; padding:0 12px; gap:6px; border-bottom:1px solid #dfe5ec; }
+    .dot { width:8px; height:8px; border-radius:50%; background:#ff6680; } .dot:nth-child(2){background:#ffab19}.dot:nth-child(3){background:#65c466}
+    .project-name { margin-left:8px; color:#6b7a90; font-size:11px; font-weight:800; }
+    .editor-main { display:grid; grid-template-columns: .75fr 1.24fr .87fr; height:254px; }
+    .block-panel { background:#f7f9fd; padding:13px 10px; border-right:1px solid #e4e9f0; }
+    .mini-title { font-size:9px; font-weight:900; text-transform:uppercase; color:#7990aa; letter-spacing:.7px; margin: 0 0 9px; }
+    .block { color:#fff; font-size:9px; font-weight:800; margin:6px 0; padding:6px 6px; border-radius:4px; line-height:1.05; }
+    .motion { background:#4c97ff; }.looks {background:#9966ff}.events{background:#ffbf00}.control{background:#ffab19}
+    .stage { padding:10px; position:relative; background:linear-gradient(#effafe,#bce6fe); overflow:hidden; }
+    .flag { color:#55ad52; font-size:20px; position:absolute; left:10px; top:7px; }.stop { color:#ec6176; font-size:16px; position:absolute; left:35px; top:9px; }
+    .sun { width:34px;height:34px;border-radius:50%;background:#ffda45;position:absolute;right:25px;top:27px;box-shadow:0 0 0 5px rgba(255,218,69,.23); }
+    .hill { position:absolute; bottom:-35px; left:-24px; width:180px; height:95px; border-radius:50% 50% 0 0; background:#75cb62; transform:rotate(-8deg); }.hill.two{left:100px;bottom:-42px;background:#57b75a;transform:rotate(7deg);width:200px;}
+    .sprite { position:absolute; left:47%; top:47%; transform:translate(-50%,-50%); width:63px; height:50px; }
+    .cat-head { position:absolute; width:48px;height:39px;left:7px;top:7px;background:#ff8c1a;border-radius:50% 50% 43% 43%;border:2px solid #af5911; }
+    .ear {position:absolute;width:18px;height:20px;background:#ff8c1a;border:2px solid #af5911;transform:rotate(36deg);top:0;left:8px;border-radius:3px;}.ear.r{left:37px;transform:rotate(54deg)}
+    .eye {position:absolute;width:6px;height:7px;background:#fff;border:1px solid #472604;border-radius:50%;top:21px;left:18px;z-index:1}.eye.r{left:38px}.pupil{width:2px;height:3px;border-radius:50%;background:#281202;position:absolute;top:1px;left:2px}.smile{position:absolute;width:14px;height:7px;border-bottom:2px solid #592a05;border-radius:50%;left:25px;top:28px;z-index:1}
+    .code { padding:12px 9px; background:#fbfcff; border-left:1px solid #e4e9f0; }.code-block{font-size:9px;color:white;border-radius:4px;padding:6px;margin:5px 0;font-weight:800}.yellow{background:#ffbf00}.blue{background:#4c97ff}.purple{background:#9966ff}
+    .float-shape { position:absolute; color:rgba(255,255,255,.62); font-size:40px; font-weight:900; z-index:0; animation: drift 6s ease-in-out infinite; }.shape-one{right:2%;top:29%;transform:rotate(15deg)}.shape-two{left:48%;bottom:9%;font-size:28px;animation-delay:-2s}.shape-three{right:45%;top:15%;font-size:22px;animation-delay:-4s}
+    @keyframes drift{50%{translate:0 -10px;rotate:8deg}}
+    .intro { max-width:750px; margin: 0 auto; text-align:center; padding:56px 24px 37px; }.eyebrow { color:var(--purple);font-size:13px;font-weight:900;letter-spacing:1px;text-transform:uppercase; }.intro h2,.section-heading h2 { font-size:31px;letter-spacing:-1.15px;margin:8px 0 10px; }.intro p { color:#5e6e86;line-height:1.55;margin:0;font-size:16px; }
+    .projects { max-width:1170px; margin:0 auto; padding:0 28px 65px; }.section-heading { display:flex;align-items:end;justify-content:space-between;margin-bottom:19px; }.section-heading h2 { margin:0; }.all-link { color:var(--blue-deep);font-size:14px;font-weight:900; }.all-link:hover{text-decoration:underline}
+    .cards { display:grid;grid-template-columns:repeat(4,1fr);gap:17px; }
+    .card { background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 3px 7px rgba(55,77,108,.06); transition:transform .16s,box-shadow .16s; cursor:pointer; }.card:hover{transform:translateY(-5px);box-shadow:0 12px 22px rgba(55,77,108,.12)}
+    .project-art { height:152px;position:relative;overflow:hidden; }.art-one{background:linear-gradient(#4cc9f0 0 67%,#78ca59 67%)}.art-two{background:#332d72}.art-three{background:linear-gradient(135deg,#ff968d,#ffa657)}.art-four{background:linear-gradient(135deg,#ffd75d,#ff9d29)}
+    .cloud { position:absolute;width:42px;height:14px;border-radius:20px;background:#fff;left:20px;top:24px;opacity:.9; }.cloud:before,.cloud:after{content:"";position:absolute;border-radius:50%;background:#fff}.cloud:before{width:19px;height:19px;left:7px;bottom:6px}.cloud:after{width:16px;height:16px;right:5px;bottom:4px}
+    .rocket{position:absolute;left:50%;top:50%;width:32px;height:70px;background:#f7f9fe;border-radius:60% 60% 24% 24%;transform:translate(-50%,-44%) rotate(35deg);box-shadow:inset -8px -4px 0 #cbd5e9}.rocket:before{content:"";position:absolute;width:11px;height:11px;border-radius:50%;border:4px solid #55bce3;left:6px;top:16px}.rocket:after{content:"";position:absolute;width:18px;height:20px;background:#ff775d;bottom:-15px;left:7px;clip-path:polygon(50% 100%,0 0,100% 0)}
+    .space-dot{position:absolute;width:3px;height:3px;border-radius:50%;background:white;box-shadow:30px 14px white,100px -13px white,153px 48px white,44px 94px white,132px 110px white,200px 15px white}
+    .sunset{position:absolute;width:108px;height:108px;border-radius:50%;background:#ffdd72;right:-11px;bottom:-35px}.mountain{position:absolute;width:180px;height:95px;bottom:-26px;left:-17px;background:#b3438d;clip-path:polygon(0 100%,38% 12%,59% 62%,76% 33%,100% 100%)}
+    .bird{position:absolute;left:50%;top:47%;width:63px;height:39px;background:#fff0c1;border-radius:55% 50% 47% 48%;transform:translate(-50%,-50%)}.bird:before{content:"";position:absolute;width:42px;height:32px;background:#ff6a6b;border-radius:80% 10% 80% 10%;left:-19px;top:-13px;transform:rotate(-28deg)}.bird:after{content:"";position:absolute;border-left:16px solid #ffbf00;border-top:7px solid transparent;border-bottom:7px solid transparent;right:-13px;top:12px}
+    .sunburst{position:absolute;inset:-100px;background:repeating-conic-gradient(#ff9d29 0 10deg,#ffe16d 10deg 20deg);opacity:.7}.ball{position:absolute;left:50%;top:51%;transform:translate(-50%,-50%);width:75px;height:75px;border-radius:50%;background:repeating-conic-gradient(#3e9fff 0 18deg,#fff 18deg 36deg);border:4px solid #2f78c9}
+    .card-info{padding:13px 14px 14px}.card-info h3{font-size:15px;margin:0 0 7px}.byline{font-size:12px;color:#8190a6;margin:0}.heart{float:right;color:var(--coral);font-weight:800}
+    .community { background:white;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:56px 28px; }.community-inner{max-width:1050px;margin:auto;display:grid;grid-template-columns:1fr 1.15fr;gap:58px;align-items:center}.people{display:flex;align-items:end;justify-content:center;height:175px;position:relative}.person{position:absolute;width:77px;height:107px;border-radius:45px 45px 18px 18px;background:var(--coral);bottom:0}.person:before{content:"";position:absolute;width:58px;height:58px;border-radius:50%;background:#f3bd8e;top:-43px;left:10px}.person:after{content:"";position:absolute;width:70px;height:30px;border-radius:55% 55% 0 0;background:#393458;top:-48px;left:4px}.person.one{left:15%;height:93px;background:#58b8d5;transform:rotate(-5deg)}.person.two{z-index:2;background:#ff6680}.person.three{right:15%;height:99px;background:#7c5ce7;transform:rotate(5deg)}.person.three:after{background:#67362c}.person.one:after{background:#49362e}
+    .community-copy h2{font-size:30px;letter-spacing:-1px;margin:0 0 9px}.community-copy p{color:#5e6e86;line-height:1.55;margin:0 0 17px}.small-cta{background:var(--blue);color:#fff;border:0;border-radius:20px;padding:10px 18px;font-weight:900;cursor:pointer}
+    footer{max-width:1170px;margin:auto;padding:35px 28px 45px;color:#65758b;font-size:13px;display:flex;gap:18px;justify-content:space-between;align-items:center}.footer-links{display:flex;gap:18px;flex-wrap:wrap}.footer-links a:hover{text-decoration:underline}.license{font-size:12px}
+    .modal-backdrop { position:fixed;inset:0;background:rgba(26,37,62,.47);display:none;align-items:center;justify-content:center;z-index:10;padding:22px; }.modal-backdrop.open{display:flex}.modal{width:min(430px,100%);background:white;border-radius:18px;padding:30px;text-align:center;box-shadow:0 24px 60px rgba(18,30,57,.33);position:relative}.close{position:absolute;right:13px;top:10px;background:transparent;border:0;font-size:25px;color:#68778d;cursor:pointer}.modal h2{margin:0 0 8px;font-size:27px}.modal p{margin:0 0 19px;color:#63738a;line-height:1.45}.modal input{width:100%;border:1px solid #cad5e4;border-radius:8px;padding:12px;margin-bottom:11px;outline-color:var(--blue)}.modal .cta{width:100%;box-shadow:none}
+    @media(max-width:760px){.topbar{padding:0 20px;min-height:57px}.topbar nav,.search,.join{display:none}.menu-button{display:block}.topbar.menu-open{align-items:flex-start;padding-top:14px;flex-wrap:wrap}.topbar.menu-open nav{display:flex;order:3;flex-basis:100%;padding:6px 0 15px;flex-wrap:wrap;gap:13px}.hero-inner{grid-template-columns:1fr;padding:54px 25px 42px;gap:35px}.editor{max-width:430px;width:100%;margin:auto}.hero{min-height:unset}.cards{grid-template-columns:repeat(2,1fr)}.community-inner{grid-template-columns:1fr;gap:29px}.people{order:2}.community-copy{text-align:center}.section-heading h2,.intro h2{font-size:26px}footer{align-items:flex-start;flex-direction:column}.float-shape{display:none}}
+    @media(max-width:410px){.cards{grid-template-columns:1fr}.project-art{height:170px}.brand{font-size:23px}}
+  </style>
+</head>
+<body>
+  <header class="topbar" id="topbar">
+    <a class="brand" href="index.html" aria-label="Sprout home"><span class="brand-mark"></span>sprout</a>
+    <nav aria-label="Main navigation"><a href="editor.html">Create</a><a href="explore.html">Explore</a><a href="about.html">Ideas</a><a href="about.html">About</a></nav>
+    <input class="search" aria-label="Search projects" placeholder="Search">
+    <a class="join" href="editor.html">Join Sprout</a>
+    <button class="menu-button" aria-label="Open menu" aria-expanded="false" id="menu">☰</button>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <span class="float-shape shape-one">✦</span><span class="float-shape shape-two">●</span><span class="float-shape shape-three">✚</span>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <span class="hero-kicker">A place for creative coding</span>
+          <h1>Imagine, program, share.</h1>
+          <p>Make stories, games, and animations with a community that celebrates every bright idea.</p>
+          <a class="cta" href="editor.html">Start creating</a>
+        </div>
+        <div class="editor" aria-label="A playful coding editor illustration">
+          <div class="editor-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="project-name">My sunny day</span></div>
+          <div class="editor-main">
+            <div class="block-panel"><p class="mini-title">Blocks</p><div class="block motion">move 10 steps</div><div class="block motion">turn ↻ 15 degrees</div><div class="block looks">say Hello! for 2 secs</div><div class="block events">when ⚑ clicked</div></div>
+            <div class="stage"><span class="flag">⚑</span><span class="stop">●</span><span class="sun"></span><span class="hill"></span><span class="hill two"></span><div class="sprite"><span class="ear"></span><span class="ear r"></span><span class="cat-head"></span><span class="eye"><i class="pupil"></i></span><span class="eye r"><i class="pupil"></i></span><span class="smile"></span></div></div>
+            <div class="code"><p class="mini-title">Script</p><div class="code-block yellow">when ⚑ clicked</div><div class="code-block blue">go to x: 0 y: 0</div><div class="code-block purple">say "Hello!"</div><div class="code-block blue">move 20 steps</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro" id="about"><span class="eyebrow">Creative learning</span><h2>What will you make today?</h2><p>Sprout is a friendly online community where you can turn ideas into interactive projects, then remix and share them with the world.</p></section>
+
+    <section class="projects" id="explore">
+      <div class="section-heading"><div><span class="eyebrow">Featured projects</span><h2>Made by the community</h2></div><a class="all-link" href="explore.html">See all projects →</a></div>
+      <div class="cards">
+        <a class="card" href="editor.html?project=flying"><div class="project-art art-one"><i class="cloud"></i><div class="bird"></div></div><div class="card-info"><h3>Flying Friends <span class="heart">♥ 214</span></h3><p class="byline">by paperplane · remix</p></div></a>
+        <a class="card" href="editor.html?project=space"><div class="project-art art-two"><i class="space-dot"></i><div class="rocket"></div></div><div class="card-info"><h3>Star Hopper <span class="heart">♥ 189</span></h3><p class="byline">by luna-codes · remix</p></div></a>
+        <a class="card" href="editor.html?project=sunset"><div class="project-art art-three"><div class="sunset"></div><div class="mountain"></div></div><div class="card-info"><h3>Sunset Stories <span class="heart">♥ 138</span></h3><p class="byline">by orangefish · remix</p></div></a>
+        <a class="card" href="editor.html?project=catch"><div class="project-art art-four"><div class="sunburst"></div><div class="ball"></div></div><div class="card-info"><h3>Catch It! <span class="heart">♥ 96</span></h3><p class="byline">by pixelpop · remix</p></div></a>
+      </div>
+    </section>
+
+    <section class="community" id="ideas"><div class="community-inner"><div class="people" aria-hidden="true"><span class="person one"></span><span class="person two"></span><span class="person three"></span></div><div class="community-copy"><span class="eyebrow">You belong here</span><h2>A creative community for everyone</h2><p>Find a project that sparks your imagination, make it your own, and share what you discover along the way.</p><a class="small-cta" href="about.html">Discover the community</a></div></div></section>
+  </main>
+
+  <footer><div class="footer-links"><a href="about.html">About</a><a href="about.html#guidelines">Community Guidelines</a><a href="about.html#help">Help Center</a><a href="about.html#privacy">Privacy</a></div><span class="license">Made for curious minds everywhere ✦</span></footer>
+  <script>
+    const menu = document.getElementById('menu');
+    menu.addEventListener('click', () => { const open = document.getElementById('topbar').classList.toggle('menu-open'); menu.setAttribute('aria-expanded', open); menu.textContent = open ? '×' : '☰'; });
+  </script>
+</body>
+</html>
+
